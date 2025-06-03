@@ -1,0 +1,8 @@
+name: yelp-env
+channels:
+  - conda-forge
+dependencies:
+  - requests
+  - plotly
+  - polars
+  - pyarrow
