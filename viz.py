@@ -10,6 +10,7 @@ biz_df = pl.read_ndjson("data/yelp_academic_dataset_business.json")
 rev_df = pl.read_ndjson("data/yelp_academic_dataset_review.json")
 
 STATE = "CA"
+MIN_REVIEWS = 100
 
 # Load ethnicity list
 ethnicity_url = "https://raw.githubusercontent.com/cgio/global-ethnicities/master/output/ethnicities.json"
@@ -43,7 +44,7 @@ category_stats = (
         pl.col("stars").mean().alias("avg_stars"),
         pl.len().alias("num_reviews")
     )
-    .filter(pl.col("num_reviews") >= 100)
+    .filter(pl.col("num_reviews") >= MIN_REVIEWS)
     .sort("avg_stars", descending=True)
 )
 
@@ -55,7 +56,7 @@ fig = px.bar(
     x="avg_stars",
     y="categories",
     orientation="h",
-    title=f"Categories in {STATE} with ≥100 Reviews Ranked by Average Stars",
+    title=f"Categories in {STATE} with ≥{MIN_REVIEWS} Reviews Ranked by Average Stars",
     labels={"avg_stars": "Average Stars", "categories": "Category"}
 )
 fig.update_layout(
@@ -73,7 +74,7 @@ fig_top50 = px.bar(
     x="avg_stars",
     y="categories",
     orientation="h",
-    title=f"Top 50 Categories in {STATE} (≥100 Reviews)",
+    title=f"Top 50 Categories in {STATE} (≥{MIN_REVIEWS} Reviews)",
     labels={"avg_stars": "Average Stars", "categories": "Category"},
     height=1000
 )
@@ -92,7 +93,7 @@ fig_bottom50 = px.bar(
     x="avg_stars",
     y="categories",
     orientation="h",
-    title=f"Bottom 50 Categories in {STATE} (≥100 Reviews)",
+    title=f"Bottom 50 Categories in {STATE} (≥{MIN_REVIEWS} Reviews)",
     labels={"avg_stars": "Average Stars", "categories": "Category"},
     height=1000
 )
